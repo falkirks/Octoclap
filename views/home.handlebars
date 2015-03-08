@@ -28,12 +28,14 @@
                             {{/with}}
                             {{#with ../repoSelected}}
                                 <h1>{{full_name}}</h1>
-                                {{#messages}}
-                                    {{content}}
-                                {{/messages}}
-                                {{^messages}}
-                                    <p>This repo has only just been added and doesn't have any messages. Why not send one now?</p>
-                                {{/messages}}
+                                <table class="table table-hover table-responsive">
+                                    {{#messages}}
+                                        <tr><td>{{author}}</td><td>{{content}}</td></tr>
+                                    {{/messages}}
+                                    {{^messages}}
+                                        <tr><td><span class="text-primary">System</span></td><td><p>This repo has only just been added and doesn't have any messages. Why not send one now?</p></td></tr>
+                                    {{/messages}}
+                                </table>
                                 <form role="form" method="post">
                                     <div class="form-group">
                                         <textarea class="form-control">
