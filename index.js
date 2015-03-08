@@ -75,6 +75,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     }));
     app.use(passport.initialize());
     app.use(passport.session());
+    app.use(express.static('public', {}));
     app.get('/auth/github',
         passport.authenticate('github'),
         function(req, res){
