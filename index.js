@@ -7,7 +7,8 @@ var express = require('express'),
     passport = require('passport'),
     GitHubStrategy = require('passport-github').Strategy,
     session = require('express-session'),
-    github = require('octonode');
+    github = require('octonode'),
+    Sync = require('sync');
 var GITHUB_CLIENT_ID = "false";
 var GITHUB_CLIENT_SECRET = "false";
 console.log("Connecting...");
@@ -51,7 +52,18 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
                 // and return that user instead.
                 profile.accessToken = accessToken;
                 profile.refreshToken = refreshToken;
-                return done(null, profile);
+                profile.repos = [];
+                var client = github.client(accessToken);
+                var me = client.me();
+                me.repos(1, 100, function(err, data){
+                    profile.repos = profile.repos.concat(data);
+                });
+                me.orgs(1, 100, function(err, data){
+                    client.org(data[0].login).repos(1, 100, function (err, orgRepos) {
+                        profile.repos = profile.repos.concat(orgRepos);
+                    });
+                });
+                return done(null, profile); //WARNING: Race condition!!!
             });
         }
     ));
@@ -101,21 +113,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     });
     app.get('/user', ensureAuthenticated, function(req,res){
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
-        var client = github.client(req.user.accessToken);
-        client.me().repos(1, 100, function(err, data){
-            var repos = data;
-            client.me().orgs(1, 100, function(err, data){
-                var orgCount = 0;
-                for(var i = 0; i < data.length; i++){
-                    client.org(data[i].login).repos(1, 100, function (err, data) {
-                        repos = repos.concat(data);
-                        orgCount++;
-                    });
-                }
-                while(orgCount < data.length);
-                res.end(JSON.stringify(repos, null, 3));
-            });
-        });
+        res.end(JSON.stringify(req.user, null, 3));
     });
     app.get('/', function(req, res){
        res.render("home", { user: req.user });
