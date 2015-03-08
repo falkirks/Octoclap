@@ -95,6 +95,10 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
             }
         });
     });
+    app.get('/user', function(req,res){
+        res.setHeader('Content-Type', 'application/json'); // Promise JSON
+        res.end(JSON.stringify(req.user, null, 3));
+    });
     app.get('/', function(req, res){
        res.render("home", { user: req.user });
     });
