@@ -103,12 +103,14 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
             var ret = { account: req.params.account, repo: req.params.repo};
             if(document != null){
                 ret.entryExists = true;
+                ret.extended = document;
+                ret.data = document.messages;
             }
             else{
                 ret.entryExists = false;
                 ret.data = [];
-                res.end(JSON.stringify(ret, null, 3));
             }
+            res.end(JSON.stringify(ret, null, 3));
         });
     });
     app.get('/user', ensureAuthenticated, function(req,res){
