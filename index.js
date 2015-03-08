@@ -37,7 +37,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     passport.use(new GitHubStrategy({
             clientID: GITHUB_CLIENT_ID,
             clientSecret: GITHUB_CLIENT_SECRET,
-            callbackURL: "https://falk-push.herokuapp.com/auth/github/callback"
+            callbackURL: "https://octoclap.herokuapp.com/auth/github/callback"
         },
         function(accessToken, refreshToken, profile, done) {
             // asynchronous verification, for effect...
