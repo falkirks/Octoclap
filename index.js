@@ -104,7 +104,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         var client = github.client(req.user.accessToken);
         client.me().repos(1, 100, function(err, data){
             var repos = data;
-            client.me.orgs(1, 100, function(err, data){
+            client.me().orgs(1, 100, function(err, data){
                 var orgCount = 0;
                 for(var i = 0; i < data.length; i++){
                     client.org(data[i].login).repos(1, 100, function (err, data) {
