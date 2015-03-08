@@ -81,8 +81,8 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     app.get('/:user/:repo', function (request, response) {
 
     });
-    app.get('/', function(request, response){
-       response.render("home", { user: req.user });
+    app.get('/', function(req, res){
+       res.render("home", { user: req.user });
     });
     app.get('/logout', function(req, res){
         req.logout();
