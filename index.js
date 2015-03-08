@@ -7,8 +7,7 @@ var express = require('express'),
     passport = require('passport'),
     GitHubStrategy = require('passport-github').Strategy,
     session = require('express-session'),
-    github = require('octonode'),
-    Sync = require('sync');
+    github = require('octonode');
 var GITHUB_CLIENT_ID = "false";
 var GITHUB_CLIENT_SECRET = "false";
 console.log("Connecting...");
