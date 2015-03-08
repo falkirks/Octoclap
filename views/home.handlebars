@@ -1,13 +1,13 @@
 <div class="container">
-    {{#user}}
+    {{#if user}}
         <div id="wrapper">
 
             <!-- Sidebar -->
             <div id="sidebar-wrapper">
                 <ul class="sidebar-nav">
-                    {{#repos}}
+                    {{#each repos}}
                         <li><a href="/{{full_name}}">{{full_name}}</a></li>
-                    {{/repos}}
+                    {{/each}}
                 </ul>
             </div>
             <!-- /#sidebar-wrapper -->
@@ -31,8 +31,7 @@
             <!-- /#page-content-wrapper -->
 
         </div>
-    {{/user}}
-    {{^user}}
+    {{else}}
         <div class="row" style="padding: 25px;">
             <div class="page-header">
                 <h1>Octoclap</h1>
@@ -42,5 +41,5 @@
             </p>
             <a class="btn btn-lg btn-default" href="/auth/github"><i class="fa fa-github"></i> Login with GitHub</a>
         </div>
-    {{/user}}
+    {{/if}}
 </div>
