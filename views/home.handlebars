@@ -3,6 +3,14 @@
         {{username}}
     {{/user}}
     {{^user}}
-        Not logged in.
+        <div class="row" style="padding: 25px;">
+            <div class="page-header">
+                <h1>Octoclap</h1>
+            </div>
+            <p class="lead">
+                Octoclap is a simple news pushing service for open source (GitHub) software. It allows developers to quickly create messages and push them to users through code inserted into their application.
+            </p>
+            <a class="btn btn-lg btn-default" href="/auth/github"><i class="fa fa-github"></i> Login with GitHub</a>
+        </div>
     {{/user}}
 </div>

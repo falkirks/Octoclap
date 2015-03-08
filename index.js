@@ -74,12 +74,26 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         function(req, res) {
             res.redirect('/');
     });
+    app.get('/api', function(req, res){
+
+    });
     app.engine('handlebars', exphbs({defaultLayout: 'main'}));
     app.set('view engine', 'handlebars');
     app.set('port', (process.env.PORT || 5000));
 
-    app.get('/:user/:repo', function (request, response) {
-
+    app.get('/:account/:repo', function (req, res) {
+        res.setHeader('Content-Type', 'application/json'); // Promise JSON
+        channels.findOne({"_id": req.params.account + "/" + req.params.repo}, function(err, document){
+            var ret = { account: req.params.account, repo: req.params.repo};
+            if(document != null){
+                ret.entryExists = true;
+            }
+            else{
+                ret.entryExists = false;
+                ret.data = [];
+                res.end(JSON.stringify(ret, null, 3));
+            }
+        });
     });
     app.get('/', function(req, res){
        res.render("home", { user: req.user });
