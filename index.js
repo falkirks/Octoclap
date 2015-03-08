@@ -117,7 +117,11 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
         res.end(JSON.stringify(req.user, null, 3));
     });
-    app.get('/:account/:repo', ensureAuthenticated, function(req, res){
+    app.use('/:account/:repo', ensureAuthenticated, function(req, res){
+        var message = null;
+        if(req.method == "POST"){
+            message = "Data has been posted.";
+        }
         var name = req.params.account + "/" + req.params.repo;
         var repo = getRepo(req.user.repos, name);
         if(repo != null) {
@@ -130,12 +134,12 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
                     });
                     document = repo;
                 }
-                res.render("home", {user: req.user, repoSelected: document});
+                res.render("home", {user: req.user, repoSelected: document, message: message});
             });
         }
         else{
             res.status(403);
-            res.end("You don't have permission to access this repo.");
+            res.render("home", {user: req.user, message: "You don't have permission to access that repository."});
         }
     });
     app.get('/', function(req, res){
