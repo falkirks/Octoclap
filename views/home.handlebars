@@ -25,10 +25,12 @@
                                 {{^messages}}
                                     <p>This repo has only just been added and doesn't have any messages. Why not send one now?</p>
                                 {{/messages}}
-                                <form role="form" style="padding-bottom: 15px;">
-                                    <textarea class="form-control">
+                                <form role="form">
+                                    <div class="form-group">
+                                        <textarea class="form-control">
 
-                                    </textarea>
+                                        </textarea>
+                                    </div>
                                     <button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Submit</button>
                                 </form>
                             {{else}}
