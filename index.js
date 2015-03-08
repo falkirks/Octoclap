@@ -129,7 +129,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
             var message = null;
             if(req.method == "POST"){
                 message = req.body.content;
-                channels.update({"_id": name}, {'$push': {"messages": req.body.content}}, function(err, records) {
+                channels.update({"_id": name}, {'$push': {"messages": {timestamp: new Date(), author: req.user.username, content: req.body.content.trim()}}}, function(err, records) {
                     if (err) throw err;
                 });
             }
