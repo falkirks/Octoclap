@@ -98,11 +98,11 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
             }
         });
     });
-    app.get('/user', function(req,res){
+    app.get('/user', ensureAuthenticated, function(req,res){
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
         var client = github.client(req.user.accessToken);
         client.get('/user', {}, function (err, status, body, headers) {
-            res.end(body);
+            res.end(JSON.stringify(body, null, 3));
         });
     });
     app.get('/', function(req, res){
@@ -116,3 +116,9 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         console.log("Node app is running at localhost:" + app.get('port'))
     });
 });
+function ensureAuthenticated(req, res, next) {
+    if (req.isAuthenticated())
+        return next();
+    else
+        req.redirect("/");
+}
