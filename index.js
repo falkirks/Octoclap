@@ -47,6 +47,8 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
                 // represent the logged-in user.  In a typical application, you would want
                 // to associate the GitHub account with a user record in your database,
                 // and return that user instead.
+                profile.accessToken = accessToken;
+                profile.refreshToken = refreshToken;
                 return done(null, profile);
             });
         }
