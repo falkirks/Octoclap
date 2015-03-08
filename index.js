@@ -100,7 +100,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     app.set('view engine', 'handlebars');
     app.set('port', (process.env.PORT || 5000));
 
-    app.get('/:account/:repo', function (req, res) {
+    app.get('/api/:account/:repo', function (req, res) {
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
         channels.findOne({"_id": req.params.account + "/" + req.params.repo}, function(err, document){
             var ret = { account: req.params.account, repo: req.params.repo};
@@ -118,6 +118,27 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
         res.end(JSON.stringify(req.user, null, 3));
     });
+    app.get('/:account/:repo', ensureAuthenticated, function(req, res){
+        var name = req.params.account + "/" + req.params.repo;
+        var repo = getRepo(req.user.repos, name);
+        if(repo != null) {
+            channels.findOne({"_id": name}, function (err, document) {
+                if (document == null) {
+                    repo._id = repo["full_name"];
+                    repo.messages = [];
+                    channels.insert(repo, function(err, records) {
+                        if (err) throw err;
+                    });
+                    document = repo;
+                }
+                res.render("home", {user: req.user, repo: document});
+            });
+        }
+        else{
+            res.status(403);
+            res.end("You don't have permission to access this repo.");
+        }
+    });
     app.get('/', function(req, res){
        res.render("home", { user: req.user });
     });
@@ -134,4 +155,10 @@ function ensureAuthenticated(req, res, next) {
         return next();
     else
         res.redirect("/");
+}
+function getRepo(list, fullName){
+    for(var i = 0; i < list.length; i++){
+        if(list[i]["full_name"] == fullName) return list[i];
+    }
+    return null;
 }
