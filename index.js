@@ -50,7 +50,6 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
                 // and return that user instead.
                 profile.accessToken = accessToken;
                 profile.refreshToken = refreshToken;
-                profile.client = github.client(accessToken);
                 return done(null, profile);
             });
         }
@@ -101,7 +100,8 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     });
     app.get('/user', function(req,res){
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
-        req.user.client.get('/user', {}, function (err, status, body, headers) {
+        var client = github.client(req.user.accessToken);
+        client.user.client.get('/user', {}, function (err, status, body, headers) {
             res.end(body);
         });
     });
