@@ -54,8 +54,9 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
                 profile.repos = [];
                 var client = github.client(accessToken);
                 var me = client.me();
-                profile.repos = me.repos(1, 100, function(err, data){
-                    return data;
+                me.repos(1, 100, function(err, data){
+                    profile.repos = data;
+                    return done(null, profile);
                 });
                 /*me.orgs(1, 100, function(err, data){
                     for(var i = 0; i < data.length; i++) {
@@ -64,7 +65,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
                         });
                     }
                 });*/
-                return done(null, profile); //WARNING: Race condition!!!
+                //return done(null, profile); //WARNING: Race condition!!!
             });
         }
     ));
