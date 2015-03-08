@@ -18,7 +18,13 @@
                     <div class="row">
                         <div class="col-lg-12">
                             {{#with ../repoSelected}}
-                                {{full_name}}
+                                <h1>{{full_name}}</h1>
+                                {{#messages}}
+                                    {{content}}
+                                {{/messages}}
+                                {{^messages}}
+                                    <p>This repo has only just been added and doesn't have any messages. Why not send one now?</p>
+                                {{/messages}}
                             {{else}}
                                 <h1>Octoclap</h1>
                                 <p> Ready to push messages to users of your open source software? This page will give you details on integrating Octoclap into your application.</p>
