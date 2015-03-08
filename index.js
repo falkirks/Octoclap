@@ -7,7 +7,8 @@ var express = require('express'),
     passport = require('passport'),
     GitHubStrategy = require('passport-github').Strategy,
     session = require('express-session'),
-    github = require('octonode');
+    github = require('octonode'),
+    bodyParser = require('body-parser');
 var GITHUB_CLIENT_ID = "false";
 var GITHUB_CLIENT_SECRET = "false";
 console.log("Connecting...");
@@ -76,6 +77,10 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     app.use(passport.initialize());
     app.use(passport.session());
     app.use(express.static('public', {}));
+    app.use(bodyParser.json());       // to support JSON-encoded bodies
+    app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
+        extended: true
+    }));
     app.get('/auth/github',
         passport.authenticate('github'),
         function(req, res){
@@ -120,7 +125,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     app.use('/:account/:repo', ensureAuthenticated, function(req, res){
         var message = null;
         if(req.method == "POST"){
-            message = "Data has been posted.";
+            message = req.body.content;
         }
         var name = req.params.account + "/" + req.params.repo;
         var repo = getRepo(req.user.repos, name);
