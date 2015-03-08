@@ -7,8 +7,7 @@ var express = require('express'),
     passport = require('passport'),
     GitHubStrategy = require('passport-github').Strategy,
     session = require('express-session'),
-    github = require('octonode'),
-    Sync = require('node-sync');
+    github = require('octonode');
 var GITHUB_CLIENT_ID = "false";
 var GITHUB_CLIENT_SECRET = "false";
 console.log("Connecting...");
@@ -50,16 +49,22 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
                 // represent the logged-in user.  In a typical application, you would want
                 // to associate the GitHub account with a user record in your database,
                 // and return that user instead.
-                Sync(function(accessToken, profile, done){
-                    profile.accessToken = accessToken;
-                    profile.refreshToken = refreshToken;
-                    profile.repos = [];
-                    var client = github.client(accessToken);
-                    var me = client.me();
-                    profile.repos = profile.repos.concat(me.repos.sync());
-                    return done(null, profile);
-
-                }(accessToken, profile, done), Sync.log);
+                profile.accessToken = accessToken;
+                profile.refreshToken = refreshToken;
+                profile.repos = [];
+                var client = github.client(accessToken);
+                var me = client.me();
+                profile.repos = me.repos(1, 100, function(err, data){
+                    return data;
+                });
+                /*me.orgs(1, 100, function(err, data){
+                    for(var i = 0; i < data.length; i++) {
+                        client.org(data[i].login).repos(1, 100, function (err, orgRepos) {
+                            profile.repos = profile.repos.concat(orgRepos);
+                        });
+                    }
+                });*/
+                return done(null, profile); //WARNING: Race condition!!!
             });
         }
     ));
