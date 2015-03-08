@@ -1,3 +1,8 @@
 <div class="container">
-    Hello World!
+    {{#user}}
+        {{username}}
+    {{/user}}
+    {{^user}}
+        Not logged in.
+    {{/user}}
 </div>

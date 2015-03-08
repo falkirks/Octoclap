@@ -82,9 +82,12 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
 
     });
     app.get('/', function(request, response){
-       response.render("home", {});
+       response.render("home", { user: req.user });
     });
-
+    app.get('/logout', function(req, res){
+        req.logout();
+        res.redirect('/');
+    });
     app.listen(app.get('port'), function () {
         console.log("Node app is running at localhost:" + app.get('port'))
     });
