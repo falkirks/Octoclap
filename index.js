@@ -123,13 +123,16 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         res.end(JSON.stringify(req.user, null, 3));
     });
     app.use('/:account/:repo', ensureAuthenticated, function(req, res){
-        var message = null;
-        if(req.method == "POST"){
-            message = req.body.content;
-        }
         var name = req.params.account + "/" + req.params.repo;
         var repo = getRepo(req.user.repos, name);
         if(repo != null) {
+            var message = null;
+            if(req.method == "POST"){
+                message = req.body.content;
+                channels.update({"_id": name}, {'$push': {"messages": req.body.content}}, function(err, records) {
+                    if (err) throw err;
+                });
+            }
             channels.findOne({"_id": name}, function (err, document) {
                 if (document == null) {
                     repo._id = repo["full_name"];

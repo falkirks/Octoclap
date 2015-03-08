@@ -30,7 +30,7 @@
                                 <h1>{{full_name}}</h1>
                                 <table class="table table-hover table-responsive">
                                     {{#messages}}
-                                        <tr><td>{{timestamp}}</td><td>{{author}}</td><td>{{content}}</td></tr>
+                                        <tr><td><span class="timeago">{{timestamp}}</span></td><td><span class="text-primary">{{author}}</span></td><td>{{content}}</td></tr>
                                     {{/messages}}
                                     {{^messages}}
                                         <tr><td>Now</td><td><span class="text-primary">System</span></td><td><p>This repo has only just been added and doesn't have any messages. Why not send one now?</p></td></tr>
