@@ -103,7 +103,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         var client = github.client(req.user.accessToken);
         client.me().repos(1, 100, function(err, data){
             client.me().orgs(1, 100, function(err, orgs){
-                res.end(JSON.stringify(orgs, null, 3));
+                res.end(JSON.stringify(orgs[0].repos(), null, 3));
             });
         });
     });
