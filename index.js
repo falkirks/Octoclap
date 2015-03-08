@@ -102,8 +102,8 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
         var client = github.client(req.user.accessToken);
         client.me().repos(1, 100, function(err, data){
-            client.me().orgs(1, 100, function(err, orgs){
-                res.end(JSON.stringify(orgs[0].repos(), null, 3));
+            client.get("/user/orgs", function (err, status, body, headers){
+                res.end(JSON.stringify(body, null, 3));
             });
         });
     });
