@@ -6,7 +6,8 @@ var express = require('express'),
     MongoClient = require('mongodb').MongoClient,
     passport = require('passport'),
     GitHubStrategy = require('passport-github').Strategy,
-    session = require('express-session');
+    session = require('express-session'),
+    github = require('octonode');
 var GITHUB_CLIENT_ID = "false";
 var GITHUB_CLIENT_SECRET = "false";
 console.log("Connecting...");
@@ -49,6 +50,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
                 // and return that user instead.
                 profile.accessToken = accessToken;
                 profile.refreshToken = refreshToken;
+                profile.client = github.client(accessToken);
                 return done(null, profile);
             });
         }
@@ -99,7 +101,9 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     });
     app.get('/user', function(req,res){
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
-        res.end(JSON.stringify(req.user, null, 3));
+        req.user.client.get('/user', {}, function (err, status, body, headers) {
+            res.end(body);
+        });
     });
     app.get('/', function(req, res){
        res.render("home", { user: req.user });
