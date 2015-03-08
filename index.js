@@ -101,8 +101,8 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     app.get('/user', ensureAuthenticated, function(req,res){
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
         var client = github.client(req.user.accessToken);
-        client.get('/user', {}, function (err, status, body, headers) {
-            res.end(JSON.stringify(body, null, 3));
+        client.repos(1, 100, function(err, data){
+            res.end(JSON.stringify(data, null, 3));
         });
     });
     app.get('/', function(req, res){
