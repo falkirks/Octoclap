@@ -39,7 +39,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
             clientID: GITHUB_CLIENT_ID,
             clientSecret: GITHUB_CLIENT_SECRET,
             callbackURL: "https://octoclap.herokuapp.com/auth/github/callback",
-            scope:["user", "repo", "read:org"]
+            scope: ["user", "repo", "read:org"]
         },
         function(accessToken, refreshToken, profile, done) {
             // asynchronous verification, for effect...
@@ -103,8 +103,17 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
         var client = github.client(req.user.accessToken);
         client.me().repos(1, 100, function(err, data){
-            client.get("/user/orgs", function (err, status, body, headers){
-                res.end(JSON.stringify(body, null, 3));
+            var repos = data;
+            client.me.orgs(1, 100, function(err, data){
+                var orgCount = 0;
+                for(var i = 0; i < data.length; i++){
+                    client.org(data[i].login).repos(1, 100, function (err, data) {
+                        repos = repos.concat(data);
+                        orgCount++;
+                    });
+                }
+                while(orgCount < data.length);
+                res.end(JSON.stringify(repos, null, 3));
             });
         });
     });
