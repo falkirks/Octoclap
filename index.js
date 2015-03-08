@@ -93,9 +93,6 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         function(req, res) {
             res.redirect('/');
     });
-    app.get('/api', function(req, res){
-
-    });
     app.engine('handlebars', exphbs({defaultLayout: 'main'}));
     app.set('view engine', 'handlebars');
     app.set('port', (process.env.PORT || 5000));
