@@ -55,6 +55,8 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     app.use(session({
         secret: 'keyboard cat'
     }));
+    app.use(passport.initialize());
+    app.use(passport.session());
     app.get('/auth/github',
         passport.authenticate('github'),
         function(req, res){
