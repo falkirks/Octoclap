@@ -30,10 +30,10 @@
                                 <h1>{{full_name}}</h1>
                                 <table class="table table-hover table-responsive">
                                     {{#messages}}
-                                        <tr><td>{{author}}</td><td>{{content}}</td></tr>
+                                        <tr><td>{{timestamp}}</td><td>{{author}}</td><td>{{content}}</td></tr>
                                     {{/messages}}
                                     {{^messages}}
-                                        <tr><td><span class="text-primary">System</span></td><td><p>This repo has only just been added and doesn't have any messages. Why not send one now?</p></td></tr>
+                                        <tr><td>Now</td><td><span class="text-primary">System</span></td><td><p>This repo has only just been added and doesn't have any messages. Why not send one now?</p></td></tr>
                                     {{/messages}}
                                 </table>
                                 <form role="form" method="post">
