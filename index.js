@@ -38,7 +38,8 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     passport.use(new GitHubStrategy({
             clientID: GITHUB_CLIENT_ID,
             clientSecret: GITHUB_CLIENT_SECRET,
-            callbackURL: "https://octoclap.herokuapp.com/auth/github/callback"
+            callbackURL: "https://octoclap.herokuapp.com/auth/github/callback",
+            scope:["user", "repo", "read:org"]
         },
         function(accessToken, refreshToken, profile, done) {
             // asynchronous verification, for effect...
@@ -98,7 +99,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
             }
         });
     });
-    app.get('/user/:account/:repo', ensureAuthenticated, function(req,res){
+    app.get('/user', ensureAuthenticated, function(req,res){
         res.setHeader('Content-Type', 'application/json'); // Promise JSON
         var client = github.client(req.user.accessToken);
         client.me().repos(1, 100, function(err, data){
