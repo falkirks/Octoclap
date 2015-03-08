@@ -25,12 +25,12 @@
                                 {{^messages}}
                                     <p>This repo has only just been added and doesn't have any messages. Why not send one now?</p>
                                 {{/messages}}
-                                <div class="input-group">
-                                    <div class="input-group-btn">
-                                        <button type="submit" class="btn btn-default">Submit</button>
-                                    </div>
-                                    <input type="text" class="form-control">
-                                </div>
+                                <form role="form">
+                                    <textarea class="form-control">
+                                        
+                                    </textarea>
+                                    <button type="submit" class="btn btn-default">Submit</button>
+                                </form>
                             {{else}}
                                 <h1>Octoclap</h1>
                                 <p> Ready to push messages to users of your open source software? This page will give you details on integrating Octoclap into your application.</p>
