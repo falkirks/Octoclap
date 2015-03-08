@@ -131,7 +131,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
                     });
                     document = repo;
                 }
-                res.render("home", {user: req.user, repo: document});
+                res.render("home", {user: req.user, repoSelected: document});
             });
         }
         else{
