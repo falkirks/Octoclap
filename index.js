@@ -8,7 +8,8 @@ var express = require('express'),
     GitHubStrategy = require('passport-github').Strategy,
     session = require('express-session'),
     github = require('octonode'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    flash = require('connect-flash');
 var GITHUB_CLIENT_ID = "false";
 var GITHUB_CLIENT_SECRET = "false";
 console.log("Connecting...");
@@ -81,6 +82,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     app.use(bodyParser.urlencoded({     // to support URL-encoded bodies
         extended: true
     }));
+    app.use(flash());
     app.get('/auth/github',
         passport.authenticate('github'),
         function(req, res){
@@ -128,34 +130,41 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         if(repo != null) {
             var message = null;
             if(req.method == "POST"){
-                message = req.body.content;
+                req.flash('message', "Message posted.");
                 channels.update({"_id": name}, {'$push': {"messages": {timestamp: moment().format(), author: req.user.username, content: req.body.content.trim()}}}, function(err, records) {
                     if (err) throw err;
                 });
+                res.redirect("/" + name);
+                res.end();
             }
-            channels.findOne({"_id": name}, function (err, document) {
-                if (document == null) {
-                    repo._id = repo["full_name"];
-                    repo.messages = [];
-                    channels.insert(repo, function(err, records) {
-                        if (err) throw err;
-                    });
-                    document = repo;
-                }
-                res.render("home", {user: req.user, repoSelected: document, message: message});
-            });
+            else {
+                channels.findOne({"_id": name}, function (err, document) {
+                    if (document == null) {
+                        repo._id = repo["full_name"];
+                        repo.messages = [];
+                        channels.insert(repo, function (err, records) {
+                            if (err) throw err;
+                        });
+                        document = repo;
+                    }
+                    res.render("home", {user: req.user, repoSelected: document, message: req.flash('message')});
+                });
+            }
         }
         else{
-            res.status(403);
-            res.render("home", {user: req.user, message: "You don't have permission to access that repository."});
+            req.flash('message', "You don't have permission to access that repository.");
+            res.redirect("/");
+            res.end();
         }
     });
     app.get('/', function(req, res){
-       res.render("home", { user: req.user });
+       res.render("home", { user: req.user, message: req.flash('message')});
     });
     app.get('/logout', function(req, res){
         req.logout();
+        req.flash('message', 'You are now logged out.');
         res.redirect('/');
+        res.end();
     });
     app.listen(app.get('port'), function () {
         console.log("Node app is running at localhost:" + app.get('port'))
