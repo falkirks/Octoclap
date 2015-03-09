@@ -62,6 +62,15 @@
             <div class="page-header">
                 <h1>Octoclap</h1>
             </div>
+            {{#with ../message}}
+                <div class="alert alert-info alert-dismissable">
+                    <button type="button" class="close" data-dismiss="alert"
+                            aria-hidden="true">
+                        &times;
+                    </button>
+                    {{this}}
+                </div>
+            {{/with}}
             <p class="lead">
                 Octoclap is a simple news pushing service for open source (GitHub) software. It allows developers to quickly create messages and push them to users through code inserted into their application.
             </p>
