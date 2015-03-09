@@ -42,7 +42,7 @@
 
                                         </textarea>
                                     </div>
-                                    <button type="submit" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Submit</button>
+                                    <button id="submitButton" type="button" class="btn btn-primary"><i class="fa fa-paper-plane"></i> Submit</button>
                                 </form>
                             {{else}}
                                 <h1>Octoclap</h1>
@@ -80,7 +80,7 @@
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
 <script>
-    $("#newMessageForm").submit(function(event){
+    $("#submitButton").click(function(event){
         event.preventDefault();
         bootbox.confirm("Are you sure you want to add this message?", function(result) {
             if(result){
