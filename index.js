@@ -129,7 +129,7 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
         var repo = getRepo(req.user.repos, name);
         if(repo != null) {
             var message = null;
-            if(req.method == "POST"){
+            if(req.method == "POST" && req.body.content.trim() != ""){
                 req.flash('message', "Message posted.");
                 channels.update({"_id": name}, {'$push': {"messages": {timestamp: moment().format(), author: req.user.username, content: req.body.content.trim()}}}, function(err, records) {
                     if (err) throw err;
