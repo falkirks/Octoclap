@@ -29,12 +29,21 @@
                             {{#with ../repoSelected}}
                                 <h1>{{full_name}}</h1>
                                 <table class="table table-hover table-responsive">
-                                    {{#messages}}
-                                        <tr><td><abbr class="timeago" title="{{timestamp}}"></abbr></td><td><span class="text-primary">{{author}}</span></td><td>{{content}}</td></tr>
-                                    {{/messages}}
-                                    {{^messages}}
-                                        <tr><td>Now</td><td><span class="text-primary">System</span></td><td><p>This repo has only just been added and doesn't have any messages. Why not send one now?</p></td></tr>
-                                    {{/messages}}
+                                    <thead>
+                                        <tr>
+                                            <td>Time</td>
+                                            <td>Author</td>
+                                            <td>Message</td>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#messages}}
+                                            <tr><td><abbr class="timeago" title="{{timestamp}}"></abbr></td><td><span class="text-primary">{{author}}</span></td><td>{{content}}</td></tr>
+                                        {{/messages}}
+                                        {{^messages}}
+                                            <tr><td>Now</td><td><span class="text-primary">System</span></td><td><p>This repo has only just been added and doesn't have any messages. Why not send one now?</p></td></tr>
+                                        {{/messages}}
+                                    </tbody>
                                 </table>
                                 <form role="form" method="post" id="newMessageForm">
                                     <div class="form-group">
@@ -78,7 +87,6 @@
         </div>
     {{/user}}
 </div>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
 <script>
     $("#submitButton").click(function(event){
         event.preventDefault();
