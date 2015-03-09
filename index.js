@@ -110,12 +110,23 @@ MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
             var ret = { account: req.params.account, repo: req.params.repo};
             if(document != null){
                 ret.entryExists = true;
-                ret.extended = document;
-                ret.data = document.messages;
+                var since = req.param('since');
+                if(since != null){
+                    since = moment(since);
+                    ret.messages = [];
+                    for(var i = 0; i < document.messages.length; i++){
+                        if(moment(document.messages[i].time).isAfter(since)){
+                            ret.messages.push(document.messages[i]);
+                        }
+                    }
+                }
+                else {
+                    ret.messages = document.messages;
+                }
             }
             else{
                 ret.entryExists = false;
-                ret.data = [];
+                ret.messages = [];
             }
             res.end(JSON.stringify(ret, null, 3));
         });
