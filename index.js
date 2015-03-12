@@ -11,8 +11,6 @@ var express = require('express'),
     github = require('octonode'),
     bodyParser = require('body-parser'),
     flash = require('connect-flash');
-var GITHUB_CLIENT_ID = "false";
-var GITHUB_CLIENT_SECRET = "false";
 console.log("Connecting...");
 var content= JSON.parse(fs.readFileSync("config.json", "utf8"));
 var GITHUB_CLIENT_ID = content.clientId;
