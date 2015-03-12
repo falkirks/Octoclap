@@ -3,6 +3,7 @@ var express = require('express'),
     jf = require('jsonfile'),
     moment = require('moment'),
     request = require('request'),
+    fs = require('fs'),
     MongoClient = require('mongodb').MongoClient,
     passport = require('passport'),
     GitHubStrategy = require('passport-github').Strategy,
@@ -13,6 +14,9 @@ var express = require('express'),
 var GITHUB_CLIENT_ID = "false";
 var GITHUB_CLIENT_SECRET = "false";
 console.log("Connecting...");
+var content= JSON.parse(fs.readFileSync("config.json", "utf8"));
+var GITHUB_CLIENT_ID = content.clientId;
+var GITHUB_CLIENT_SECRET = content.clientSecret;
 MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     if(err) throw err;
     channels = db.collection('channels');
