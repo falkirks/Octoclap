@@ -13,8 +13,8 @@ var express = require('express'),
     flash = require('connect-flash');
 console.log("Connecting...");
 var content= JSON.parse(fs.readFileSync("config.json", "utf8"));
-var GITHUB_CLIENT_ID = content.clientId;
-var GITHUB_CLIENT_SECRET = content.clientSecret;
+var GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || content.clientId;
+var GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET ||content.clientSecret;
 MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
     if(err) throw err;
     channels = db.collection('channels');
