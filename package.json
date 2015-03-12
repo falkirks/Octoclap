@@ -1,7 +1,6 @@
 {
-  "name": "node-js-getting-started",
-  "version": "0.1.2",
-  "description": "A sample Node.js app using Express 4",
+  "name": "Octoclap",
+  "version": "0.0.1",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
