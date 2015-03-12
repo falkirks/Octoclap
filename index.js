@@ -12,7 +12,12 @@ var express = require('express'),
     bodyParser = require('body-parser'),
     flash = require('connect-flash');
 console.log("Connecting...");
-var content= JSON.parse(fs.readFileSync("config.json", "utf8"));
+try {
+    var content = JSON.parse(fs.readFileSync("config.json", "utf8"));
+}
+catch(e){
+    content = {};
+}
 var GITHUB_CLIENT_ID = process.env.GITHUB_CLIENT_ID || content.clientId;
 var GITHUB_CLIENT_SECRET = process.env.GITHUB_CLIENT_SECRET ||content.clientSecret;
 MongoClient.connect(process.env.MONGOLAB_URI, function(err, db) {
